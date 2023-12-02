@@ -1,6 +1,7 @@
 const userModel = require("../models/userModels");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
+const sercretKey= "kfkr%^&*&^%^%cuelnn%%%$$#$#%^yr7ghtigntikjf"
 const notificationModel = require("../models/notificationModel");
 const register = async (req, res) => {
   try {
@@ -52,7 +53,7 @@ const login = async (req, res) => {
     }
     const token = jwt.sign(
       { email: email, _id: user._id },
-      process.env.sercretKey
+      process.env.sercretKey || sercretKey
     );
     return res.status(200).json({ msg: "Logged in", token: token });
   } catch (e) {
