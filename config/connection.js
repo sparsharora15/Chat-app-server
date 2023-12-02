@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const connectionUrl = process.env.connectURI
+const connectionUrl = process.env.connectURI || "mongodb+srv://sparsharora:sparsharora15@cluster0.znskbqc.mongodb.net/chat-app?retryWrites=true&w=majori"
 const mongoOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
