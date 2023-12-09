@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -22,11 +23,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    userNotifications:{
+    userNotifications: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "notification",
       required: true,
-    }
+    },
+    profilePicture: {
+      type: String, 
+    },
   },
   { timestamps: true, autoIndex: false }
 );

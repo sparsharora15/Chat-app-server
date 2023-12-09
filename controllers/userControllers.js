@@ -1,41 +1,58 @@
 const userModel = require("../models/userModels");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
-const sercretKey= "kfkr%^&*&^%^%cuelnn%%%$$#$#%^yr7ghtigntikjf"
+const sercretKey = "kfkr%^&*&^%^%cuelnn%%%$$#$#%^yr7ghtigntikjf";
 const notificationModel = require("../models/notificationModel");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "dw65n4evs",
+  api_key: "452623662246538",
+  api_secret: "Li8nDCTGy5iG-BrXQk0dpzGmOfA",
+});
+
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const profilePicture = req.file.path;
+    console.log(req.body ,"req.body")
+    console.log(req.file ,"req.files")
     if (!email || email.trim() === "") {
       return res.status(200).json({ msg: "Invalid email address" });
     }
     if (!name || name.trim() === "") {
       return res.status(200).json({ msg: "Name is required" });
     }
-
     if (!password || password.length < 6) {
       return res
         .status(200)
         .json({ msg: "Password must be at least 6 characters long" });
     }
+
     const user = await userModel.findOne({ email: email });
     if (user) {
-      return res.status(200).json({ msg: "email already registered" });
+      return res.status(200).json({ msg: "Email already registered" });
     }
+
     const encryptPassword = md5(password);
+
+    const cloudinaryResponse = await cloudinary.uploader.upload(profilePicture);
+
     const saveUser = new userModel({
       name: name,
       email: email,
       password: encryptPassword,
+      profilePicture: cloudinaryResponse.secure_url,
     });
+
     await saveUser.save();
+
     return res.status(200).json({ msg: "User created successfully" });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ msg: "An unexpected error occurred" });
   }
 };
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
