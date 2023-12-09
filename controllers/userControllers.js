@@ -15,8 +15,7 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const profilePicture = req.file.path;
-    console.log(req.body ,"req.body")
-    console.log(req.file ,"req.files")
+
     if (!email || email.trim() === "") {
       return res.status(200).json({ msg: "Invalid email address" });
     }
@@ -35,14 +34,16 @@ const register = async (req, res) => {
     }
 
     const encryptPassword = md5(password);
-
-    const cloudinaryResponse = await cloudinary.uploader.upload(profilePicture);
+    let cloudinaryResponse;
+    if (profilePicture) {
+      cloudinaryResponse = await cloudinary.uploader.upload(profilePicture);
+    }
 
     const saveUser = new userModel({
       name: name,
       email: email,
       password: encryptPassword,
-      profilePicture: cloudinaryResponse.secure_url,
+      profilePicture: cloudinaryResponse.secure_url || null,
     });
 
     await saveUser.save();
