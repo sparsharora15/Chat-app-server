@@ -14,7 +14,11 @@ cloudinary.config({
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const profilePicture = req.file.path;
+    let profilePicture = null;  // Default to null
+
+    if (req.file && req.file.path) {
+      profilePicture = req.file.path;
+    }
 
     if (!email || email.trim() === "") {
       return res.status(200).json({ msg: "Invalid email address" });
@@ -43,7 +47,7 @@ const register = async (req, res) => {
       name: name,
       email: email,
       password: encryptPassword,
-      profilePicture: cloudinaryResponse.secure_url || null,
+      profilePicture: cloudinaryResponse ? cloudinaryResponse.secure_url : null,
     });
 
     await saveUser.save();
