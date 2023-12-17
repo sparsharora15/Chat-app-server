@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const conversationSchema = new mongoose.Schema(
   {
     members: {
@@ -6,9 +7,13 @@ const conversationSchema = new mongoose.Schema(
       required: true,
     },
     messages: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Chat",
-      required: true,
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Chat",
+        },
+      ],
+      required: false,
     },
   },
   { timestamps: true, autoIndex: false }
@@ -26,7 +31,10 @@ const ChatSchema = new mongoose.Schema(
     },
     text: {
       type: String,
-      required: true,
+      required: false,
+    },
+    media: {
+      type: String, // Assuming the media is a URL or file path
     },
   },
   { timestamps: true, autoIndex: false }
@@ -34,4 +42,5 @@ const ChatSchema = new mongoose.Schema(
 
 const ChatModel = mongoose.model("Chat", ChatSchema);
 const conversationModel = mongoose.model("conversations", conversationSchema);
-module.exports = {conversationModel,ChatModel};
+
+module.exports = { conversationModel, ChatModel };
