@@ -1,5 +1,12 @@
 const { conversationModel, ChatModel } = require("../models/conversationModel");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "dw65n4evs",
+  api_key: "452623662246538",
+  api_secret: "Li8nDCTGy5iG-BrXQk0dpzGmOfA",
+});
 
 const createChat = async (req, res) => {
   try {
